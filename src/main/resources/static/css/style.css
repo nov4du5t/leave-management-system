@@ -4551,6 +4551,7 @@ label.control-label {
     padding-top: 6px;
     text-align: center;
     margin: 2em 0 0;
+    border: 1px solid #e74c3c;
 }
 .w3l-txt {
     margin: 6.5em 0;
