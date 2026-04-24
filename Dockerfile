@@ -12,7 +12,7 @@ RUN mvn clean install -DskipTests
 # Stage 2: Runtime
 FROM tomcat:9.0-jdk11-openjdk-slim
 
-# Install PostgreSQL client
+# Install PostgreSQL clients
 RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
 
 # Copy the built war file from builder stage
