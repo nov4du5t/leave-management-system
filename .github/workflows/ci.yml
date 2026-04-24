@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: target/*.jar
+          path: target/*.war
 
   test:
     runs-on: ubuntu-latest
@@ -48,13 +48,20 @@ jobs:
           cache: maven
 
       - name: Run tests with Maven
-        run: mvn test
+        run: mvn test jacoco:report
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: target/surefire-reports/
+          if-no-files-found: warn
+
+      - name: Upload code coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage
+          path: target/site/jacoco/
           if-no-files-found: warn
 
   deploy:
@@ -80,6 +87,17 @@ jobs:
 
       - name: Check running containers
         run: docker ps
+
+      - name: Save Docker image as artifact
+        run: |
+          docker save leave-management-system:latest -o leave-system-image.tar
+          gzip leave-system-image.tar
+
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: leave-system-image.tar.gz
 
       - name: View deployment logs
         run: docker-compose logs
