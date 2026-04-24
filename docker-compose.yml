@@ -28,7 +28,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/lms
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/leave-management-system:latest
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=murali123
     ports:

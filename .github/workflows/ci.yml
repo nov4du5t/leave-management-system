@@ -83,14 +83,14 @@ jobs:
 
       - name: Save Docker image as artifact
         run: |
-          docker save leave-management-system:latest -o leave-system-image.tar
-          gzip leave-system-image.tar
+          docker save leave-management-system:latest -o leave-management-system-image.tar
+          gzip leave-management-system-image.tar
 
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v4
         with:
           name: docker-image
-          path: leave-system-image.tar.gz
+          path: leave-management-system-image.tar.gz
 
       - name: View deployment logs
         run: docker-compose logs
