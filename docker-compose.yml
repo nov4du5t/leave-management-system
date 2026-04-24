@@ -22,6 +22,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: leave-management-system:latest
     container_name: lms-tomcat
     depends_on:
       postgres:
