@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:13-alpine
+    container_name: lms-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: murali123
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/main/resources/app-DB-Script.sql:/docker-entrypoint-initdb.d/app-DB-Script.sql
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - lms-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  tomcat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lms-tomcat
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/lms
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=murali123
+    ports:
+      - "8080:8080"
+    networks:
+      - lms-network
+    volumes:
+      - ./target:/usr/local/tomcat/webapps/logs
+
+volumes:
+  postgres_data:
+
+networks:
+  lms-network:
+    driver: bridge
